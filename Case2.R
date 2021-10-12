@@ -24,7 +24,7 @@ cor(Case2[,c(-1,-2)], use="pairwise")
 
 ###REGRESSIONS
 
-###VARIABLE 1: INSERT VARIABLE
+###VARIABLE 1: Average Salary
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
 #actually create model
 #discuss model (R^2, p-value, slope)
@@ -35,7 +35,7 @@ cor(Case2[,c(-1,-2)], use="pairwise")
   #Homoskedasticity - BPTest
   #Remaining assumptions with plot of lm
 
-###VARIABLE 2: INSERT VARIABLE
+###VARIABLE 2: Tenured
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
 #actually create model
 #discuss model (R^2, p-value, slope)
@@ -46,7 +46,7 @@ cor(Case2[,c(-1,-2)], use="pairwise")
 #Homoskedasticity - BPTest
 #Remaining assumptions with plot of lm
     
-###VARIABLE 3: INSERT VARIABLE
+###VARIABLE 3: Total Faculty
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
 #actually create model
 #discuss model (R^2, p-value, slope)
