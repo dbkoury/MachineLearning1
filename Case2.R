@@ -9,8 +9,14 @@ setwd("C:/Users/dylan/MSBA/ML1/Assignments")
 Case2 <- read.csv("Case2.csv")
 
 #Looking at the Data
-str(Case2)
-summary(Case2)
+str(Case2) 
+#looking at the structure of our data we can see most of the variables are integers, 
+#however some appear to be missing values
+summary(Case2) 
+#in fact, the summary tells us that most of the columns have around if not significantly over 100 missing values
+pairs(Case2[c(-1,-2)]) 
+#looking at the pairs, specifically variables paired with FTRetentionRate (as that is the variable we want to look at) 
+#none of the plots seem overly linear, which may cause heteroskedasticity issues later
 
 #Deciding Which Variables to Use
 cor(Case2[,c(-1,-2)], use="pairwise") 
@@ -37,6 +43,8 @@ cor(Case2[,c(-1,-2)], use="pairwise")
 
 ###VARIABLE 2: Tenured
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
+  #Given the correlation of Tenured was about .5 (positive, moderate) with FTRetentionRate, 
+  #we should expect to see the model to have a positive relationship between these variables as well
 #actually create model
 #discuss model (R^2, p-value, slope)
 #describe visually with plots of model and regression
@@ -45,6 +53,7 @@ cor(Case2[,c(-1,-2)], use="pairwise")
 #Normalized Residuals - Normal or Skewed
 #Homoskedasticity - BPTest
 #Remaining assumptions with plot of lm
+#Explanation of model in context
     
 ###VARIABLE 3: Total Faculty
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
