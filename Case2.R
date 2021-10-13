@@ -28,18 +28,72 @@ cor(Case2[,c(-1,-2)], use="pairwise")
   #Tenured: 0.474182295
   #TotalFaculty: 0.372126301 
 
+
 ###REGRESSIONS
 
 ###VARIABLE 1: Average Salary
-#Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
+
+#Given the positive correlation of Avg Salary to FT Retention rate, it implies that as Avg Salary increases, FT retention increases. 
+#The reason Professors are generously compensated than their peers, could be due to their relatively better teaching skillset, which adds value to students' learning experience, resulting in retaining students.
+
+
 #actually create model
+lmAvgSal <- lm(FTRetentionRate~AverageSalary, data=Case2)
+
 #discuss model (R^2, p-value, slope)
-#describe visually with plots of model and regression
+summary(lmAvgSal)
+#Equation: FTRetentionRate = 54.72604970 + 0.00027742 * AverageSalary
+#RESIDUALS: 
+#The residual summary statistics give information about the symmetry of the residual distribution.
+#The variance (i.e. spread) of the residuals decreases as the predicted values increase.
+#The quartiles represent that the distribution of the residuals isn't strongly symmetrical. That means the model may have outliers.  
+
+#COEFFICIENT: 
+#Intercept: At an average Salary of 0, full-Time Retention is 54.72%.
+#Slope: A value of 0.00027742 means 10,000 unit change($10,000 increase) in Average Salary, changes(increases) FT Retention Rate by 2.7742 percentage points
+
+#Residual standard error is a measure of variation of observations around the regression line. Or the average amount that the response (FTRetentionRate) will deviate from the true regression line. 
+#A value of 10.69 means the FT Retention Rate can deviate from the true regression line by approximately 10.69, on average.
+
+#Multiple R-squared:  0.2602,	Adjusted R-squared:  0.2597. This statistic measures how well the model fits the actual data.
+#The values mean that 26% of the variance found in the response variable (FTRetention Rate) can be explained by Average Salary(predictor variable).
+
+#F-test and p=value: 
+#Our model is significant through the F-test value of 568.3 and p=value of 0.00000000000000022
+
 #Test Assumptions
-  #Linearity - plot x and y
-  #Normalized Residuals - Normal or Skewed
-  #Homoskedasticity - BPTest
-  #Remaining assumptions with plot of lm
+#Linearity - plot x and y
+plot(FTRetentionRate~AverageSalary, data=Case2)
+abline(lmAvgSal, col="red")
+#The line captures a good amount of the data, it is clear that most of the observations are clustered around $50,000-$100,000 Average Salary.
+#A lot of observations are quite far from the regression line.
+
+
+#Normalized Residuals - Normal or Skewed
+hist(lmAvgSal$residuals) 
+#Slight skewness to the left, overall the residual errors seem normal as they are centered around 0.
+mean(lmAvgSal$residuals) #confirms the errors are approximately normal as they average out to 0.
+
+#Homoskedasticity - BPTest
+lmtest::bptest(lmAvgSal)
+#The Breush-Pagan test gives us a p-value of 0.00000000002458,
+#meaning that the model is likely heteroskedastic, failing this assumption
+
+#Remaining assumptions with plot of lm
+par(mfrow=c(2,2)) #To print four plots on one page.
+plot(lmAvgSal) 
+#Residual vs Fitted: 
+#We can see heteroskedasticty, as there is a bottleneck pattern in the residual error.
+#Aside from a few potential outliers, the model has smaller residual error in the later end(higher Average Salary), than former(lower Avg Salary), demonstrated by the spread of the residuals as the fitted values increase.
+#A few residuals stand out from the basic random pattern of residuals. This suggests that there are outliers.
+
+#Normal Q-Q:
+#Our plot has a straight line in the center but heavy tails on both end. This may be because we have extreme residuals pulling away with higher standard deviations. 
+
+#Residuals vs Leverage
+#Cook's distance measures the effect of deleting a point on the combined parameter vector. Points outside the dotted line have high influence, which in this case there appear to be a few qualifiers.
+
+par(mfrow=c(1,1)) #Returning it to normal viewing condition.
 
 
 
@@ -118,7 +172,8 @@ plot(lmTenure)
   #there is a bit of a bottleneck pattern in the data as the observations get less spread out
   #This goes to further qualify that this data is heteroskedastic and not random.
   
-  #Plotting residuals and leverage shows that there are a number of observations we might consider as outliers
+  #Plotting residuals and leverage shows that there are a number of observations we might consider as outliers,
+  #But none breaching Cook's distance line
   #However, as mentioned before, given the low quality of fit for this model, 
   #I would recommend changing the model altogether rather than just removing a few observations
 
