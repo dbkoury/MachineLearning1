@@ -76,7 +76,7 @@ mean(lmTenure$residuals)
 lmtest::bptest(FTRetentionRate ~ Tenured)
     #The Breush-Pagan test gives us a p-value of 0.005616,
     #meaning that the model is likely heteroskedastic, failing this assumption
-  #Remaining assumptions with plot of lm
+  #Remaining assumptions with plot of lmTenure
 plot(lmTenure)
 #Explanation of model in context
     
