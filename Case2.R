@@ -54,18 +54,23 @@ summary(lmTenure)
   #And the intercept means for universities with no tenured professors the model predicts a retention rate of 73.5%
   #It is important to note that the slope and intercept both have significant p-values at <0.0000000000000002 ***
   #lmTenure also tells us that 738 observations were deleted due to missingness
-  #Our residual standard error is 9.295
+  #Our residual standard error is 9.295, meaning the deviation from the true value of retention could be off by 9.295, 
+  #this number would be useful to compare with the RSE of a model using log(Tenured) to determine which has the better fit
   #Lastly our R-sq value for the model is .2248, 
   #meaning that this model (Tenured) is able to explain 22.5% of the variation in the data (FTRetentionRate)
 #describe visually with plots of model and regression
 #Test Assumptions
   #Linearity - plot x and y
+par(mfrow=c(1,1))
 plot(Tenured, FTRetentionRate)
 abline(lmTenure, col = "red")
     #While the line does capture a good amount of the data, 
     #it is clear that most of the observations are clustered around 0-500 tenured professors,
     #with a good number of observations quite far from the regression line
     #this data would likely better be modeled with a log of Tenured
+    #This makes sense, as more schools would have fewer tenured professors because 
+    #getting tenure is a difficult achievement and schools with smaller staff have a ceiling
+    #Perhaps measuring tenured professors/number of professors would give a measurement less biased by school size
   #Normalized Residuals - Normal or Skewed
 hist(lmTenure$residuals)
 mean(lmTenure$residuals)
@@ -77,8 +82,26 @@ lmtest::bptest(FTRetentionRate ~ Tenured)
     #The Breush-Pagan test gives us a p-value of 0.005616,
     #meaning that the model is likely heteroskedastic, failing this assumption
   #Remaining assumptions with plot of lmTenure
+par(mfrow=c(2,2))
 plot(lmTenure)
+  #By plotting the residuals with the fitted values we can gather a few things,
+  #First we see that the second half of residuals are all positive,
+  #while the first half of residuals are both positive and negative but with a much larger skew towards negative
+  #In fact, there are a great deal of negative residuals at the start of the data that are very far from the model
+  #What this all implies is that the data is not linear, and we have a great deal of potential outliers
+  #When we look at the Normal Q-Q plot, we can see that there are in fact several observations pulling away from the line,
+  #These negative residuals are over 3 standard deviations from the model, 
+  #while the positive residuals tend to follow the line and are no more than 3 standard deviations from the line
+  #The plot of the fitted values with the square root of standardized residuals shows us 
+  #there is a bit of a bottleneck pattern in the data as the observations get less spread out
+  #This goes to further qualify that this data is heteroskedastic and not random.
+  #Plotting residuals and leverage shows that there are a number of observations we might consider as outliers
+  #However, as mentioned before, given the low quality of fit for this model, 
+  #I would recommend changing the model altogether rather than just removing a few observations
 #Explanation of model in context
+  #Ultimately this model tells us that increasing the number of Tenured professors will increase retention rate
+  #However, this model does not have the best fit, and using log(Tenured) would likely better capture the shape
+  #of Tenured's effect on FTRetentionRate and thereby be a better predictor
     
 ###VARIABLE 3: Total Faculty
 #setwd("C:/Users/anous/Desktop/Machine Learning/Team Assignment/Case 2")
@@ -116,6 +139,7 @@ coef(lmTotalFaculty)
 #it should be noted that 390 observations were deleted due to missingness
 
 #To-Do-List: start from here
+par(mfrow=c(1,1))
 plot(TotalFaculty, FTRetentionRate)
 abline(lmTotalFaculty, col = "blue")
 
