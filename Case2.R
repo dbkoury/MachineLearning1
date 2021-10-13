@@ -81,12 +81,50 @@ plot(lmTenure)
 #Explanation of model in context
     
 ###VARIABLE 3: Total Faculty
+#setwd("C:/Users/anous/Desktop/Machine Learning/Team Assignment/Case 2")
+#Case2 <- read.csv("Case2.csv")
+#attach(Case2)
+#str(case)
+#pairs(case)
+
+#cor(data[c(-1,-2)] , use= "pairwise")
+
+#dependent variable = FT Retention Rate
+
+
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
-#actually create model
+#Given the correlation of Total Faculty was about .4 (positive, moderate) with FTRetentionRate, 
+#we should expect to see the model to have a positive relationship between these variables as well
+
+
+#make variable
+lmTotalFaculty <- lm(FTRetentionRate ~ TotalFaculty, data=Case2)
+
+
 #discuss model (R^2, p-value, slope)
-#describe visually with plots of model and regression
+summary(lmTotalFaculty)
+coef(lmTotalFaculty)
+
+#Equation: FTlmTotalFaculty = 72.705429781 + 0.007367571 * TotalFaculty
+#There is a positive relationship between these variables, with Retention increasing by 0.0073
+#percentage points for every university's total faculty
+
+#The intercept lets us know that university with no faculty will have  retention rate of 72.7%
+#It is important to note that the slope and intercept both have significant p-values at <0.0000000000000002
+#which may indicate that total faculty can be a predictor since it is less than 0.05
+
+#it should be noted that 390 observations were deleted due to missingness
+
+#To-Do-List: start from here
+plot(TotalFaculty, FTRetentionRate)
+abline(lmTotalFaculty, col = "blue")
+
+#To-Do-List: may violate one of the assumptions (probably skewed), see residual plot and confer to data background if possible (similar to swirl exercise)
+hist(TotalFaculty)
+mean(TotalFaculty)
+lmtest::bptest(FTRetentionRate ~ TotalFaculty)
+
+#Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
+#discuss model (R^2, p-value, slope), #describe visually with plots of model and regression
 #Test Assumptions
-#Linearity - plot x and y
-#Normalized Residuals - Normal or Skewed
-#Homoskedasticity - BPTest
-#Remaining assumptions with plot of lm
+#Linearity - plot x and y, #Normalized Residuals - Normal or Skewed, #Homoskedasticity - BPTest, #Remaining assumptions with plot of lm
