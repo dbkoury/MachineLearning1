@@ -81,11 +81,9 @@ plot(lmTenure)
 #Explanation of model in context
     
 ###VARIABLE 3: Total Faculty
-setwd("C:/Users/anous/Desktop/Machine Learning/Team Assignment/Case 2")
-
-
-Case2 <- read.csv("Case2.csv")
-attach(Case2)
+#setwd("C:/Users/anous/Desktop/Machine Learning/Team Assignment/Case 2")
+#Case2 <- read.csv("Case2.csv")
+#attach(Case2)
 #str(case)
 #pairs(case)
 
@@ -94,11 +92,10 @@ attach(Case2)
 #dependent variable = FT Retention Rate
 
 
-###VARIABLE 2: Tenured
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
-#Given the correlation of Tenured was about .5 (positive, moderate) with FTRetentionRate, 
+#Given the correlation of Total Faculty was about .4 (positive, moderate) with FTRetentionRate, 
 #we should expect to see the model to have a positive relationship between these variables as well
-#actually create model
+
 
 #make variable
 lmTotalFaculty <- lm(FTRetentionRate ~ TotalFaculty, data=Case2)
@@ -118,19 +115,16 @@ coef(lmTotalFaculty)
 
 #it should be noted that 390 observations were deleted due to missingness
 
-#start from here
+#To-Do-List: start from here
 plot(TotalFaculty, FTRetentionRate)
 abline(lmTotalFaculty, col = "blue")
+
+#To-Do-List: may violate one of the assumptions (probably skewed), see residual plot and confer to data background if possible (similar to swirl exercise)
 hist(TotalFaculty)
 mean(TotalFaculty)
 lmtest::bptest(FTRetentionRate ~ TotalFaculty)
 
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
-#actually create model
-#discuss model (R^2, p-value, slope)
-#describe visually with plots of model and regression
+#discuss model (R^2, p-value, slope), #describe visually with plots of model and regression
 #Test Assumptions
-#Linearity - plot x and y
-#Normalized Residuals - Normal or Skewed
-#Homoskedasticity - BPTest
-#Remaining assumptions with plot of lm
+#Linearity - plot x and y, #Normalized Residuals - Normal or Skewed, #Homoskedasticity - BPTest, #Remaining assumptions with plot of lm
