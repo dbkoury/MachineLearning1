@@ -288,8 +288,9 @@ plot(lmTotalFaculty)
 #influencing part of the global environment. Hence, it is crucial for us
 #to see what factors to gauge or alter so that the educational institutes 
 #can have a sustainable system while still giving a good education to its students.
-#Having the right amount of faculty will definitely aid students and help 
+#Having the right amount of faculty will definitely aid students, likely helping 
 #universities reach optimal graduation retention rates. Too little of faculty will
 #spread proper supervision too thin, thus decreasing the education quality for students. 
 #However, unnecessarily large faculties will be a grave and inefficient expense for 
 #universities, which will decrease education institutes stability and sustainability. 
+
