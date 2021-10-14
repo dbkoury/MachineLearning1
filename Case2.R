@@ -183,12 +183,14 @@ plot(lmTenure)
   #However, this model does not have the best fit, and using log(Tenured) would likely better capture the shape
   #of Tenured's effect on FTRetentionRate and thereby be a better predictor
 
-  #At the very least, the general trends of this model may help inform universities of the role tenured professors has in retaining students
+  #At the very least, the general trends of this model may help inform universities of the role tenured professors have in retaining students.
   #This is not to say that simply lowering the bar for tenure and granting a hoarde of professors tenure will automatically increase retention,
-  #Rather I believe this has more to say about professor quality and lower turnover rates, as it is likely that professors that are of higher quality,
+  #rather I believe this trend has more to say about professor quality and lower turnover rates, as it is likely that professors that are of higher quality,
   #and that have invested many years into the culture and academic fervor of their colleges, are more likely to get tenure. 
   #A good professor can often be the motivation students considering dropping out of college need to stick with it
     
+
+
 ###VARIABLE 3: Total Faculty
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
 
