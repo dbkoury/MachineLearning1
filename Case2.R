@@ -91,7 +91,7 @@ plot(lmAvgSal)
 #Our plot has a straight line in the center but heavy tails on both end. This may be because we have extreme residuals pulling away with higher standard deviations. 
 
 #Residuals vs Leverage
-#Cook's distance measures the effect of deleting a point on the combined parameter vector. Points outside the dotted line have high influence, which in this case there appear to be a few qualifiers.
+#Cook's distance measures the effect of deleting a point on the combined parameter vector. Points outside the dotted line have high influence, which in this case cook's line does not even appear on the plot.
 
 par(mfrow=c(1,1)) #Returning it to normal viewing condition.
 
