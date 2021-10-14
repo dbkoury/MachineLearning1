@@ -184,23 +184,12 @@ plot(lmTenure)
   #of Tenured's effect on FTRetentionRate and thereby be a better predictor
     
 ###VARIABLE 3: Total Faculty
-#setwd("C:/Users/anous/Desktop/Machine Learning/Team Assignment/Case 2")
-#Case2 <- read.csv("Case2.csv")
-#attach(Case2)
-#str(case)
-#pairs(case)
-
-#cor(data[c(-1,-2)] , use= "pairwise")
-
-#dependent variable = FT Retention Rate
-
-
 #Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
+
 #Given the correlation of Total Faculty was about .4 (positive, moderate) with FTRetentionRate, 
 #we should expect to see the model to have a positive relationship between these variables as well
 
-
-#make variable
+#linear model assigned to a variable
 lmTotalFaculty <- lm(FTRetentionRate ~ TotalFaculty, data=Case2)
 
 
@@ -209,26 +198,98 @@ summary(lmTotalFaculty)
 coef(lmTotalFaculty)
 
 #Equation: FTlmTotalFaculty = 72.705429781 + 0.007367571 * TotalFaculty
+
 #There is a positive relationship between these variables, with Retention increasing by 0.0073
 #percentage points for every university's total faculty
-
-#The intercept lets us know that university with no faculty will have  retention rate of 72.7%
-#It is important to note that the slope and intercept both have significant p-values at <0.0000000000000002
+#The intercept lets us know that university with no faculty will have a retention rate of 72.7%
+#The intercept slope and intercept both have significant p-values at <0.0000000000000002
 #which may indicate that total faculty can be a predictor since it is less than 0.05
 
-#it should be noted that 390 observations were deleted due to missingness
+#lmTotalFaculty notes that  that 390 observations were deleted due to missingness
+#Our residual standard error is 11.28, meaning the deviation from true value
+#of retention could be off by 11.28
+#this number would be useful to compare with RSE of a model
+#using log(TotalFaculty) to determine which has the better fit
 
-#To-Do-List: start from here
+#Lastly our R-sq value is 0.1385, meaning that this model is able to explain 13.85% of the variation in the data
+
+#describe visually with plots of model and regression
+#Test Assumptions
+
+#Linearity- plot x and y
 par(mfrow=c(1,1))
 plot(TotalFaculty, FTRetentionRate)
-abline(lmTotalFaculty, col = "blue")
+abline(lmTotalFaculty, col = "red")
 
-#To-Do-List: may violate one of the assumptions (probably skewed), see residual plot and confer to data background if possible (similar to swirl exercise)
-hist(TotalFaculty)
-mean(TotalFaculty)
+##While the line does capture a good amount of the data, 
+#it is clear that most of the observations are clustered around 0-1000 faculty
+#members, 
+#with a good number of observations quite far from the regression line
+#this data would likely better be modeled with a log of TotalFaculty
+
+##This makes sense, as resources and finances are limited in university, hence
+#schools would have as limiting number of faculty as possible to keep the salary 
+#expenses under control. Hence most of the total faculty is packed between the 
+#0-1000. However, there are several points that deviate from the line and have
+# a larger amount of faculty with varying retention rate. 
+
+#Normalized Residuals - Normal or Skewed
+hist(lmTotalFaculty$residuals)
+mean(lmTotalFaculty$residuals)
+
+#The histogram of residuals is centered around 0 (mean: 2.650859e-16)
+#however, the graph does #appear to be skewed left which is likely because
+#those early observations well below the regression line
+
+#Homoskedasticity - BPTest
 lmtest::bptest(FTRetentionRate ~ TotalFaculty)
 
-#Prediction of what we will get based on the relationship (pos/neg;strong,weak,moderate) when put in context
-#discuss model (R^2, p-value, slope), #describe visually with plots of model and regression
-#Test Assumptions
-#Linearity - plot x and y, #Normalized Residuals - Normal or Skewed, #Homoskedasticity - BPTest, #Remaining assumptions with plot of lm
+##The Breush-Pagan test gives us a p-value of 0.2882,
+#clearly showing that they  the model is likely heteroskedastic, 
+#failing this assumption
+
+#Remaining assumptions with plot of lmTotalFaculty
+par(mfrow=c(2,2))
+plot(lmTotalFaculty)
+
+#By plotting the residuals with the fitted values, we first see that
+#there are both residuals that are positive and negative but 
+#with a much larger skew towards negative
+#In fact, there are a great deal of negative residuals at the start of 
+#the data that are very far from the model
+#What this all implies is that the data is not linear, and we have a great
+#deal of potential outliers
+
+#By looking at the  Normal Q-Q plot, we see that there are 
+#several observations pulling away from the line.
+#These negative residuals are over 3 standard deviations from the model, 
+#while the positive residuals tend to follow the line and are no more than
+#3 standard deviations from the line
+
+#The plot of the fitted values with the square root of standardized residuals
+# shows us a somewhat bottleneck pattern in the data as the observations get 
+#less spread out. This again proves that the data is heteroskedastic and not random.
+
+#Although we see multiple outliers in residuals vs leverage graph, none of them cross the Cook's distance. 
+
+#A recommendation to see the relationship better between these variables is to 
+# change the model altogether instead of ommitting observations. 
+
+
+
+#Explanation of model in context
+#The linear model tells us that increasing the number of total faculty
+#will increase retention rate. However, this model does not have the best fit. 
+#Therefore, it is recommended to use the log(Tenured) to better capture the
+#relationship. 
+
+#Why do we care?
+#Education is a big part of society and higher education is a vastly 
+#influencing part of the global environment. Hence, it is crucial for us
+#to see what factors to gauge or alter so that the educational institutes 
+#can have a sustainable system while still giving a good education to its students.
+#Having the right amount of faculty will definitely aid students and help 
+#universities reach optimal graduation retention rates. Too little of faculty will
+#spread proper supervision too thin, thus decreasing the education quality for students. 
+#However, unnecessarily large faculties will be a grave and inefficient expense for 
+#universities, which will decrease education institutes stability and sustainability. 
