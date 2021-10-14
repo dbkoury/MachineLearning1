@@ -98,6 +98,11 @@ par(mfrow=c(1,1)) #Returning it to normal viewing condition.
 #Implication of Professors' Average Salary on students' full-time retention rate is indicative in the real-world, and evident from our model, and intuitively it makes sense 
 #because a more qualified, credible Professor will bring a skill set that adds value to the students 
 #and will be equivalently commensurated for it, relatively higher than his/her peers.
+#However, we may also consider the idea that schools that can afford to pay professors higher salaries are better funded,
+#and often private schools with more funding have higher tuition rates, meaning the sunk cost of dropping out may be higher
+#as students have already paid exorbitant amounts of money to attend.
+#Ultimately the takeaway is that schools should focus on the return a professor brings to learning and retention
+#rather than the base salary cost when considering new hires
 
 
 
@@ -285,14 +290,14 @@ plot(lmTotalFaculty)
 #Although we see multiple outliers in residuals vs leverage graph, none of them cross the Cook's distance. 
 
 #A recommendation to see the relationship better between these variables is to 
-# change the model altogether instead of ommitting observations. 
+# change the model altogether instead of omitting observations. 
 
 
 
 #Explanation of model in context
 #The linear model tells us that increasing the number of total faculty
 #will increase retention rate. However, this model does not have the best fit. 
-#Therefore, it is recommended to use the log(Tenured) to better capture the
+#Therefore, it is recommended to use the log(TotalFaculty) to better capture the
 #relationship. 
 
 #Why do we care?
