@@ -33,7 +33,7 @@ cor(Case2[,c(-1,-2)], use="pairwise")
 
 ###VARIABLE 1: Average Salary
 
-#Given the positive correlation of Avg Salary to FT Retention rate, it implies that as Avg Salary increases, FT retention increases. 
+#Given the positive correlation of Avg Salary to FT Retention rate, it implies that as Avg Salary increases, FT retention rate increases. 
 #The reason Professors are generously compensated than their peers, could be due to their relatively better teaching skillset, which adds value to students' learning experience, resulting in retaining students.
 
 
@@ -94,6 +94,10 @@ plot(lmAvgSal)
 #Cook's distance measures the effect of deleting a point on the combined parameter vector. Points outside the dotted line have high influence, which in this case there appear to be a few qualifiers.
 
 par(mfrow=c(1,1)) #Returning it to normal viewing condition.
+
+#Implication of Professors' Average Salary on students' full-time retention rate is indicative in the real-world, and evident from our model, and intuitively it makes sense 
+#because a more qualified, credible Professor will bring a skill set that adds value to the students 
+#and will be equivalently commensurated for it, relatively higher than his/her peers.
 
 
 
