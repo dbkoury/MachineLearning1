@@ -18,6 +18,9 @@ summary(shortlogmodel)
 options(scipen=999)
 exp(shortlogmodel$coefficients)
 
+#interpret the results of coefficients
+#provide insight into what the results mean
+
 ###PART 2:
 divideData <- createDataPartition(data$intubated,p=.1,list=F)
 train <- data[divideData,]
@@ -45,6 +48,7 @@ mean(data$intubated=="No") #0.818078
 #False Negatives: When we wrongfully identify an observation for needing intubation (but they don't)
 (logC <- logtable[2]) #4
 
+
 #Sensitivity
 (logSensitivity <- logA/(logA+logC)) #0.9999138
   #This model does a great job predicting if someone is not intubated (our positive class)
@@ -54,7 +58,7 @@ mean(data$intubated=="No") #0.818078
   #But it does a terrible job prediciting if someone is intubated (our negative class)
   #We would argue that the accuracy of this metric is more critical, as if someone who is not intubated but should have been could lead to death,
   #Whereas if someone who is intubated but should not have been is just a waste of resources
-
+#Balanced Accuracy
 (logBalanced <- (logSensitivity+logSpecificity)/2)
   #Our balanced accuracy is 0.5001022
 
@@ -88,6 +92,9 @@ predictions <- ldamodel %>% predict(testtransformed)
 
 (ldaSpecificity <- ldaD/(ldaB+ldaD)) #0.00009687106
 
+#Sensitivity
+#Specificity
+#Balanced Accuracy
 (ldaBalanced <- (ldaSensitivity+ldaSpecificity)/2)
 #Our balanced accuracy is 0.5000377
 
@@ -118,6 +125,8 @@ knntable <- table(knnpred,testtransformed$intubated)
 #False Negatives
 (knnC <- knntable[2]) #838
 
+#Sensitivity
+#Specificity
 (knnSensitivity <- knnA/(knnA+knnC)) #0.9819478
 
 (knnSpecificity <- knnD/(knnB+knnD)) #0.03419549
@@ -126,4 +135,6 @@ knntable <- table(knnpred,testtransformed$intubated)
 
 ###CONCLUSION:
 
+#best model
+#shape of data (linear to non-parametric)
 ##In Dylan's opinion we should use the QDA results because all of these models are crap and we would be better off pulling something out of our ass or just paying the money to give everyone an intubator. Hail Satan. Free Love.
