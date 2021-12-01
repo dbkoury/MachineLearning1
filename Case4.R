@@ -143,7 +143,30 @@ predictions <- ldamodel %>% predict(testtransformed)
 #As discussed earlier, we had to edit the model to get it to run properly
 qdamodel <- qda(intubated~.-Gender-labResults,data=traintransformed)
 
+qdapredictions <- qdamodel %>% predict(testtransformed)
+#Accuracy Rate - 
+(qdaaccuracy <- mean(qdapredictions$class == testtransformed$intubated))
+#Error Rate - 
+(qdaerror <- 1-qdaaccuracy)
+# QDA model actually did worse with a 0.8577778 accuracy rate given proportion of .8 and set seed of 1000 - likely overfitting the data
+(qdatable <- table(predictions$class,testtransformed$intubated, dnn=c("Predicted","Observed")))
 
+#True Positives
+(qdaA <- qdatable[1]) #
+#True Negatives
+(qdaD <- qdatable[4]) #
+#False Positives
+(qdaB <- qdatable[3]) #
+#False Negatives
+(qdaC <- qdatable[2]) #
+#Sensitivity
+(qdaSensitivity <- qdaA/(qdaA+qdaC)) #
+#Specificity
+(qdaSpecificity <- qdaD/(qdaB+qdaD)) #
+
+#Balanced Accuracy
+(qdaBalanced <- (qdaSensitivity+qdaSpecificity)/2)
+#Our balanced accuracy is 
 
 #KNN Model
 set.seed(666)
