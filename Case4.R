@@ -15,11 +15,26 @@ set.seed(666)
 
 shortlogmodel <- glm(intubated~ age + Gender, data=data, family=binomial)
 summary(shortlogmodel)
+#Both of our variables are significant at an alpha of .01
 options(scipen=999)
+#However for our interpretation we will convert our coefficients to odds.
 exp(shortlogmodel$coefficients)
-
 #interpret the results of coefficients
-#provide insight into what the results mean
+#(Intercept)         age GenderWoman 
+#0.1169510   1.0144292   0.7407149
+
+#The intercept implies that for our base (man at the age of 0) the odds of being intubated are 0.1169510 to 1
+# For an increase 1 year in the patient's age, the odds of the patients getting intubated increases by a factor of 1.0144.
+1/0.7407149
+#Our Gender Variable uses being a woman as the base, so the log odds implies that
+#The odds of being intubated as a woman are 0.7407 times less likely than as a man
+#Stated differently, being a man increases the odds of intubation by a factor of 1.350047 
+
+#These results imply that older people and men are more likely to be intubated
+#Given what we know about the most at risk populations, there tends to be a heavy skew towards covid deaths of older patients
+#It would make sense that hospitals are targeting older citizens for intubator use
+#A number of medical studies have also begun to find evidence supporting the notion that the male population is more at risk of covid-19
+#Therefore once again it would make sense that hospitals are targeting this slice of the population for intubators
 
 ###PART 2:
 divideData <- createDataPartition(data$intubated,p=.1,list=F)
@@ -40,15 +55,20 @@ pred <- ifelse(probs>0.5, "Yes", "No")
 
 mean(data$intubated=="No") #0.818078
 #In fact, we would actually have a slightly higher accuracy rate just predicting every observation as no than this model gives us
+#Ultimately, not a super effective model.
 
 #True Positives: When we correctly identify an observation for not needing intubation
 (logA <- logtable[1]) #46417
+#Model correctly predicts 46417 patients as not requiring intubation which is a good amount
 #True Negatives: When we correctly identify an observation for needing intubation
 (logD <- logtable[4]) #3
+#But very very few negatives as we only correctly identified 3 patients who needed intubation.
 #False Positives: When we wrongfully identify an observation as not needing intubation (but they do)
 (logB <- logtable[3]) #10320
+#However, the trade off is that it is more often assuming positive as it incorrectly mislabels 10320 patients as not needing intubation, when they actually did need intubation
 #False Negatives: When we wrongfully identify an observation for needing intubation (but they don't)
 (logC <- logtable[2]) #4
+#Model only incorrectly labels a few positives as negatives, but has more false positives than true positives
 
 
 #Sensitivity
@@ -62,8 +82,7 @@ mean(data$intubated=="No") #0.818078
   #Whereas if someone who is intubated but should not have been is just a waste of resources
 #Balanced Accuracy
 (logBalanced <- (logSensitivity+logSpecificity)/2)
-  #Our balanced accuracy is 0.5001022
-
+  #Our balanced accuracy is 0.5001022 or 50% (as sensitivity is almost 100% and specificity is nearly 0%)
 
 #LDA Model
 preprocessing <- train %>% preProcess(method=c("center","scale"))
@@ -77,26 +96,43 @@ predictions <- ldamodel %>% predict(testtransformed)
 
 (ldaaccuracy <- mean(predictions$class==testtransformed$intubated))
 ##Accuracy Rate = 0.8180777
+  #Slightly higher accuracy rate than the logistic model
 (ldaerror <- 1-ldaaccuracy)
 ##Error Rate = 0.1819223
-  #Slightly Lower than the logistic model, still a slightly higher error rate than simply assigning no to every observation
+  #Slightly Lower error rate than the logistic model, still a slightly higher error rate than simply assigning no to every observation
 
 #True Positives
 (ldaA <- ldatable[1]) #46420
+#We correctly identified 46420 patients as not requiring intubation.
+#Meaning this model accurately predicted a few more positives than the logistic model
 #True Negatives
 (ldaD <- ldatable[4]) #1
+#We only correctly identified 1 patient who needed intubation.
+#This model accurately predicts a few less negatives than the logistic model
 #False Positives
 (ldaB <- ldatable[3]) #10322
+#We incorrectly assumed that 10322 patients did not need intubation, when they actually did need intubation.
+#Actually 2 more false positives than before
 #False Negatives
 (ldaC <- ldatable[2]) #1
+#We incorrectly assumed that 1 patient needed intubation, when they did not.
+#This meant fewer false negatives (except the model still only predicts two total negatives)
+
 #Sensitivity
 (ldaSensitivity <- ldaA/(ldaA+ldaC)) #0.9999785
+#This model, like the logistic model does a great job predicting if someone is not intubated.
+#The metric acccounted for nearly all of the accuracy in the model (99.99%)
+#This model actually has a higher sensitivity than the logistic model, as seen it does a better job at predicting positives
 #Specificity
 (ldaSpecificity <- ldaD/(ldaB+ldaD)) #0.00009687106
+#But this model does not accurately predict if someone is intubated (similar but worse than the logistics model).
+#This makes sense as LDA and logistics model are similar to one another. Hence having similar
+#sensitivity and specificity happens by the models' nature. 
 
 #Balanced Accuracy
 (ldaBalanced <- (ldaSensitivity+ldaSpecificity)/2)
 #Our balanced accuracy is 0.5000377
+#Again this is about 50%, which makes sense given the near 100%/0% trade-off
 
 #QDA Model
 #qdamodel <- qda(intubated~.,data=traintransformed)
@@ -144,28 +180,60 @@ knntable <- table(knnpred,testtransformed$intubated)
 
 (knnaccuracy <- mean(knnpred==testtransformed$intubated))
 ##Accuracy Rate = 0.8095305
+  #This model gives us the lowest accuracy rate
 (knnerror <- 1-knnaccuracy)
 ##Error Rate = 0.1904695
-  #This model gives us the lowest accuracy rate
+#Since error rate is directly related to accuracy rate, we see that the model's low accuracy rate reflects on the higher error rate too.
+  
 
 #True Positives
 (knnA <- knntable[1]) #45583
+#This model predicts the fewest number of positives correctly
 #True Negatives
 (knnD <- knntable[4]) #353
+#However it correctly predicts about 350 more negatives than the other models
 #False Positives
 (knnB <- knntable[3]) #9970
+#There is also a lower number of false positives
 #False Negatives
 (knnC <- knntable[2]) #838
+#With the trade off of many more false negatives
+#This pattern makes sense because this model appears to select more variables as negative than the others,
+#meaning there is likely to be more selection error
 
 #Sensitivity
 (knnSensitivity <- knnA/(knnA+knnC)) #0.9819478
+#This model still does a great job predicting if someone is not intubated. Although it's not as high as other models
+#In comparisonA, we've lost about 1-2% of our sensitivity
 #Specificity
 (knnSpecificity <- knnD/(knnB+knnD)) #0.03419549
+#However, we have traded that sensitivity for a 3-4% higher specificity, the highest we've gotten so far
+#Although 0.03 is a low number on paper, given the other models predicted less than 5 negatives at all, this is a solid improvement
+#Therefore, this model does the best job at predicting if someone is intubated.
+#Which, in the beginning of the case, we mentioned is a more critical rate since its consequences are more dire.
 #Balanced Accuracy
 (knnBalanced <- (knnSensitivity+knnSpecificity)/2) #0.5080717
+#Ultimately this trade off has given us a higher balanced accuracy
+#While it has only gone up less than a percentage, 
+#this increase is reflective of the KNN model increasing the specificity measurement
 
 ###CONCLUSION:
 
-#best model
-#shape of data (linear to non-parametric)
-##In Dylan's opinion we should use the QDA results because all of these models are crap and we would be better off pulling something out of our ass or just paying the money to give everyone an intubator. Hail Satan. Free Love.
+#Based solely upon accuracy, the "best" model would realistically be none of them,
+#In fact, as mentioned earlier, we would achieve a higher accuracy rate than every model by simply assuming that every observation was negative (not intubated)
+#However in truth we believe a holistic approach that considers the accuracy of the model's ability to guess both positive and negative observations correctly
+#This is especially critical in context of the data.
+#Our models do a great job at predicting non intubated observations, they do a rather awful job at predicting intubated observations
+#Our data deals with covid patients, and while incorrectly predicted nonintubated patients may lead to a misuse/waste of resources, incorrectly predicting someone who needs an intubator as not could lead to death
+#Because of this, we chose the best model based upon the balanced accuracy metric that considers both equally.
+#Simply assigning every observation as non intubated would produce a balanced accuracy of 50%
+#Every single model outperformed 50%,
+#However the model with the highest balanced accuracy was our K-Nearest Neighbors model, due to it having the highest specificity rate (accurately predicting which patients need to be intubated)
+#hence we believe the KNN model is the best model
+#Given the difficultly of our logistic and lda models to accurately predict any negative observations,
+#It is likely that the shape of the decision boundary is not linear,
+#And K-Nearest Neighbors makes no assumptions about the shape of the decision boundary and is therefore a non-parametric approach
+#This is likely why it was able to accurately predict 350 more negative observations than the other models, giving it the highest specificity rate.
+#While this number is still rather low considering the massive amount of data used in the testing data,
+#each one of those values is a potential life at risk.
+
