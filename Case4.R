@@ -19,7 +19,14 @@ options(scipen=999)
 exp(shortlogmodel$coefficients)
 
 #interpret the results of coefficients
+#(Intercept)         age GenderWoman 
+#0.1169510   1.0144292   0.7407149
+
+
 #provide insight into what the results mean
+# For an increase 1 year in the patient's age, the odds of the patients getting intubated 
+#increases by a factor of 1.0144. When a patient's gender is female, the odds of the patients getting 
+#intubated increases by a factor of 0.7407.
 
 ###PART 2:
 divideData <- createDataPartition(data$intubated,p=.1,list=F)
@@ -43,12 +50,16 @@ mean(data$intubated=="No") #0.818078
 
 #True Positives: When we correctly identify an observation for not needing intubation
 (logA <- logtable[1]) #46417
+#We correctly identified 46417 patients as not requiring intubation.
 #True Negatives: When we correctly identify an observation for needing intubation
 (logD <- logtable[4]) #3
+#We correctly identified 3 patients who needed intubation.
 #False Positives: When we wrongfully identify an observation as not needing intubation (but they do)
 (logB <- logtable[3]) #10320
+#We incorrectly assumed that 10320 patients did not need intubation, when they actually did need intubation.
 #False Negatives: When we wrongfully identify an observation for needing intubation (but they don't)
 (logC <- logtable[2]) #4
+#We incorrectly assumed that 4 patients needed intubation, when they did not. 
 
 
 #Sensitivity
@@ -62,7 +73,7 @@ mean(data$intubated=="No") #0.818078
   #Whereas if someone who is intubated but should not have been is just a waste of resources
 #Balanced Accuracy
 (logBalanced <- (logSensitivity+logSpecificity)/2)
-  #Our balanced accuracy is 0.5001022
+  #Our balanced accuracy is 0.5001022. As it can be seen in the 
 
 
 #LDA Model
@@ -77,23 +88,36 @@ predictions <- ldamodel %>% predict(testtransformed)
 
 (ldaaccuracy <- mean(predictions$class==testtransformed$intubated))
 ##Accuracy Rate = 0.8180777
+#This model does  somewhat good job at predicting if someone is not intubated. 
+#It is a bit worse than Logistic model as its metric was about 99%.
 (ldaerror <- 1-ldaaccuracy)
 ##Error Rate = 0.1819223
-  #Slightly Lower than the logistic model, still a slightly higher error rate than simply assigning no to every observation
+  #However, its error rate is lower than the logistic model.
+  #Nevertheless, itstill a slightly higher error rate than simply assigning no to every observation.
 
 #True Positives
 (ldaA <- ldatable[1]) #46420
+#We correctly identified 46420 patients as not requiring intubation.
 #True Negatives
 (ldaD <- ldatable[4]) #1
+#We correctly identified 1 patient who needed intubation.
 #False Positives
 (ldaB <- ldatable[3]) #10322
+#We incorrectly assumed that 10322 patients did not need intubation, when they actually did need intubation.
 #False Negatives
 (ldaC <- ldatable[2]) #1
+#We incorrectly assumed that 1 patient needed intubation, when they did not. 
+
+
 #Sensitivity
 (ldaSensitivity <- ldaA/(ldaA+ldaC)) #0.9999785
+#This model, like the logistic model does a great job predicting if someone is not intubated.
+#The metric acccounted for nearly all of the accuracy in the model (99.99%)
 #Specificity
 (ldaSpecificity <- ldaD/(ldaB+ldaD)) #0.00009687106
-
+#But it doesn't do that good of a job at predicting if someone is intubated (similar to logistics model).
+#This makes sense as LDA and logistics model are similar to one another. Hence having similar
+#sensitivity and specificity happens by the modeles' nature. 
 #Balanced Accuracy
 (ldaBalanced <- (ldaSensitivity+ldaSpecificity)/2)
 #Our balanced accuracy is 0.5000377
@@ -144,9 +168,10 @@ knntable <- table(knnpred,testtransformed$intubated)
 
 (knnaccuracy <- mean(knnpred==testtransformed$intubated))
 ##Accuracy Rate = 0.8095305
+#This model gives us the lowest accuracy rate. 
 (knnerror <- 1-knnaccuracy)
 ##Error Rate = 0.1904695
-  #This model gives us the lowest accuracy rate
+#Since error rate is directly related to accuracy rate, we see that the model's low accuracy rate reflects on the error rate too. 
 
 #True Positives
 (knnA <- knntable[1]) #45583
@@ -158,15 +183,20 @@ knntable <- table(knnpred,testtransformed$intubated)
 (knnC <- knntable[2]) #838
 
 #Sensitivity
-#Specificity
 (knnSensitivity <- knnA/(knnA+knnC)) #0.9819478
-
+#This model does a great job predicting if someone is not intubated. Although it's not as high as other models (98% vs. 99%), it does account for most of the accuracy. 
+#Specificity
 (knnSpecificity <- knnD/(knnB+knnD)) #0.03419549
-
+#Although 0.03 is a low number on paper, it is the highest specificity rate that we have gotten so far. Therefore, this model does the best job at prediciting if someone is intubated.
+#Which, in the beginning of the case, we mentioned is a more critical rate since its consequences are more dire.  
+#Balanced Accuracy
 (knnBalanced <- (knnSensitivity+knnSpecificity)/2) #0.5080717
 
 ###CONCLUSION:
 
-#best model
-#shape of data (linear to non-parametric)
+#best model and shape of data 
+#As previously mentioned, we looked at the Specificity rate as it is supposed to predict whether someone needs to and is intubated. The highest 
+#specificity rate was of KNN model, hence we believe the KNN model is the best model. KNN is a completely non-parametric approach since no 
+#assumptions are made about the shape of decision boundary. Since we had the highest specificity rate in KNN, we can assume
+#that the shape of data is very non-parametric. Hail Hydra🐙
 ##In Dylan's opinion we should use the QDA results because all of these models are crap and we would be better off pulling something out of our ass or just paying the money to give everyone an intubator. Hail Satan. Free Love.
