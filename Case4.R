@@ -158,11 +158,10 @@ knntable <- table(knnpred,testtransformed$intubated)
 (knnC <- knntable[2]) #838
 
 #Sensitivity
-#Specificity
 (knnSensitivity <- knnA/(knnA+knnC)) #0.9819478
-
+#Specificity
 (knnSpecificity <- knnD/(knnB+knnD)) #0.03419549
-
+#Balanced Accuracy
 (knnBalanced <- (knnSensitivity+knnSpecificity)/2) #0.5080717
 
 ###CONCLUSION:
