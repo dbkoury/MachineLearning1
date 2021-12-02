@@ -63,7 +63,7 @@ pred <- ifelse(probs>0.5, "Yes", "No")
 ##Accuracy Rate = 0.8180601
 (logerror <- 1-logaccuracy)
 ##Error Rate = 0.1819399
-  #With our Logistic Model, we predict 81.806% of data accurately and 18.19% inaccurately
+  #With our Logistic Model, we predicted 81.806% of the observations accurately and 18.19% inaccurately
 
 mean(data$intubated=="No") #0.818078
   #Interestingly, we would have a slightly higher accuracy rate by predicting every observation as "no" than this model gives us
@@ -237,7 +237,7 @@ knntable <- table(knnpred,testtransformed$intubated)
 #In fact, as mentioned earlier, we would achieve a higher accuracy rate than every model by simply assuming that every observation was negative (not intubated)
 #However in truth we believe a holistic approach would be better, one that considers the accuracy of the model's ability to guess both positive and negative observations correctly
 #This is especially critical in context of the data.
-#Our models do a great job at predicting non intubated observations, they do an inaccurate job at predicting intubated observations
+#Our models have a high accuracy when predicting non intubated observations, they have a much lower accuracy when predicting intubated observations
 #Our data deals with covid patients, and while incorrectly predicted nonintubated patients may lead to a misuse/waste of resources, incorrectly predicting someone who needs an intubator as not could lead to death
 #Because of this, we chose the best model based upon the balanced accuracy metric that considers both equally.
 #Simply assigning every observation as non intubated would produce a balanced accuracy of 50%
@@ -248,6 +248,6 @@ knntable <- table(knnpred,testtransformed$intubated)
 #It is likely that the shape of the decision boundary is not linear,
 #And K-Nearest Neighbors makes no assumptions about the shape of the decision boundary and is therefore a non-parametric approach
 #This is likely why it was able to accurately predict 350 more negative observations than the other models, giving it the highest specificity rate.
-#With an increase in correct prediction of those that need medical attention, we are expanding the care and assistance to those in need.
+#With an increase in correct prediction of those that require medical attention, our chosen model would ultimately increase care and assistance to those in need better than the other models.
 #While our number is still rather low considering the massive amount of observations used in the testing data, each one of those values is a potential life at risk
 #that may have not received medical attention if we used a different model with a lower Specificity rate. 
